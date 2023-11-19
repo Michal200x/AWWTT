@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wprowadzone dane</title>
+  <style>
+    a{
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wprowadzone dane oraz wyniki kalkulacji</h1>
+  <a href="/add-by-keyboard">Wprowadź dane</a>
+  <br>
+  <a href="/add-by-file">Wprowadź dane z pliku</a>
+  <br>
+  <a href="/">Wróć</a>
+  <section th:unless="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}">
+    <h3>Poniżej znajdują się wprowadzone dane: </h3>
+    <p>Masa przed tarciem = <span th:text="${data.getMassBeforeFriction()}">10.0</span>g</p>
+    <p>Masa po tarciu = <span th:text="${data.getMassAfterFriction()}">1.0</span>g</p>
+    <p>Siła nacisku = <span th:text="${data.getPressureForce()}">100.0</span>N</p>
+
+    <h3>Wyliczenia dotyczące masy: </h3>
+    <p>&Delta;m = <span th:text="${deltaMass}">9.0</span>g</p>
+    <p>&Delta;m [%] = <span th:text="${deltaMassInPercent}">90.0</span>%</p>
+  </section>
+
+  <h2 th:if="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}"
+      style="color: indianred">Brak danych</h2>
+
+  <hr>
+
+  <section th:if="false">
+    <p>Dane</p>
+  </section>
+  <h2 th:if="true" style="color: indianred">Brak danych z pliku</h2>
+  <br>
+  <a href="/">Wróć</a>
+</body>
+</html>
