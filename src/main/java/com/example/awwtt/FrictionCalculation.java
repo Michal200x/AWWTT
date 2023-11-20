@@ -2,8 +2,6 @@ package com.example.awwtt;
 
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class FrictionCalculation {
     private final FileDataRepository fileDataRepository;

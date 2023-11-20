@@ -15,7 +15,6 @@ public class FileScanner {
     public static void main(String[] args) {
         List<List<Double>> data = readDataFromAscFile("example.ASC");
 
-        // Do something with the extracted data
         for (List<Double> line : data) {
             System.out.println(line);
         }

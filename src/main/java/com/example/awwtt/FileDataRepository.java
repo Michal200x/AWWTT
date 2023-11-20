@@ -15,7 +15,7 @@ public class FileDataRepository {
 
     private final List<FileData> fileDataList = new ArrayList<>();
 
-    public List<FileData> readDataFromAscFile(String fileName) {
+    public void readDataFromAscFile(String fileName) {
         try {
             // Wczytaj plik z folderu resources
             ClassPathResource resource = new ClassPathResource(fileName);
@@ -38,8 +38,6 @@ public class FileDataRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return fileDataList;
     }
 
     private FileData parseFileDataFromLine(String line) {
