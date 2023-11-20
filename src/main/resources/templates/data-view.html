@@ -7,6 +7,15 @@
     a{
       display: block;
     }
+    table{
+      border: 1px solid black;
+      border-collapse: collapse;
+      max-width: 500px;
+      width: 100%;
+    }
+    td{
+      border: 1px solid black;
+    }
   </style>
 </head>
 <body>
@@ -25,6 +34,10 @@
     <h3>Wyliczenia dotyczące masy: </h3>
     <p>&Delta;m = <span th:text="${deltaMass}">9.0</span>g</p>
     <p>&Delta;m [%] = <span th:text="${deltaMassInPercent}">90.0</span>%</p>
+
+    <h3>Wyliczenia dotyczące siły: </h3>
+    <p>Średnia siła tarcia = <span th:text="${averageForce}">23.23</span>N</p>
+    <p>Współczynnik tarcia= <span th:text="${coefficientFriction}">63.0</span>&micro;</p>
   </section>
 
   <h2 th:if="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}"
@@ -32,10 +45,28 @@
 
   <hr>
 
-  <section th:if="false">
-    <p>Dane</p>
+  <section th:unless="${fileDataList.isEmpty()}">
+    <p>Poniżej znajduje się tabela z wynikami otrzymanymi z próby</p>
+    <table>
+      <thead>
+      <tr>
+        <td>Czas [s]</td>
+        <td>Siła tarcia [N]</td>
+        <td>Głębokość wytarcia [mm]</td>
+        <td>T [°C]</td>
+      </tr>
+      </thead>
+      <tbody>
+        <tr th:each="fileData: ${fileDataList}" th:object="${fileData}">
+          <td th:text="*{time}">0.000</td>
+          <td th:text="*{frictionForce}">22.752</td>
+          <td th:text="*{penetrationDepth}">5.625</td>
+          <td th:text="*{temperature}">17.596</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
-  <h2 th:if="true" style="color: indianred">Brak danych z pliku</h2>
+  <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
   <br>
   <a href="/">Wróć</a>
 </body>

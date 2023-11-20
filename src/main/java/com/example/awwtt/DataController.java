@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DataController {
     private final DataRepository dataRepository;
     private final MassCalculation massCalculation;
+    private final FileDataRepository fileDataRepository;
+    private final FrictionCalculation frictionCalculation;
 
-    public DataController(DataRepository dataRepository, MassCalculation massCalculation) {
+    public DataController(DataRepository dataRepository, MassCalculation massCalculation,
+                          FileDataRepository fileDataRepository, FrictionCalculation frictionCalculation) {
         this.dataRepository = dataRepository;
         this.massCalculation = massCalculation;
+        this.fileDataRepository = fileDataRepository;
+        this.frictionCalculation = frictionCalculation;
     }
 
     @GetMapping("/add-by-keyboard")
@@ -36,11 +41,20 @@ public class DataController {
         return "redirect:/";
     }
 
+    @PostMapping("/save-file")
+    String saveDataFromFile(@RequestParam String fileName){
+        fileDataRepository.readDataFromAscFile(fileName);
+        return "redirect:/";
+    }
+
     @GetMapping("/data-view")
     String dataView(Model model){
         model.addAttribute("data", dataRepository.findData());
         model.addAttribute("deltaMass", massCalculation.calculateDeltaMass());
         model.addAttribute("deltaMassInPercent", massCalculation.calculateDeltaMassInPercent());
+        model.addAttribute("fileDataList", fileDataRepository.findFileData());
+        model.addAttribute("averageForce", frictionCalculation.calculateAverageForce());
+        model.addAttribute("coefficientFriction", frictionCalculation.calculateCoefficientFriction());
         return "data-view";
     }
 }

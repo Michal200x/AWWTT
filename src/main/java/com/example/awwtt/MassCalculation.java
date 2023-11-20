@@ -10,11 +10,11 @@ public class MassCalculation {
         this.dataRepository = dataRepository;
     }
 
-    double calculateDeltaMass(){
+    public double calculateDeltaMass(){
         return  dataRepository.findData().getMassBeforeFriction() - dataRepository.findData().getMassAfterFriction();
     }
 
-    double calculateDeltaMassInPercent(){
+    public double calculateDeltaMassInPercent(){
         double absValueOfMass = Math.abs(
                 (dataRepository.findData().getMassBeforeFriction() - dataRepository.findData().getMassAfterFriction())
                 /dataRepository.findData().getMassBeforeFriction());

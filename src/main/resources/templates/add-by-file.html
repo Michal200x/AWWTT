@@ -6,6 +6,14 @@
 </head>
 <body>
   <h1>Dodaj plik</h1>
+  <form method="post" action="/save-file">
+      <label>
+          Nazwa pliku:
+          <input name="fileName" type="text" step="any">
+      </label>
+      <button type="submit">Wprowadź plik</button>
+  </form>
+  <br>
   <a href="/">Wróć</a>
 </body>
 </html>
