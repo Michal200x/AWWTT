@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Strona główna</title>
-  <style>
-    a{
-      display: block;
-    }
-  </style>
+    <style>
+        body {
+            background-color: #f5f5dc;
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 <h1>Aplikacja do analizy i wizualizacji wyników testu tribologicznego</h1>
-<a href="/add-by-keyboard">Wprowadź dane do analizy</a>
-<br>
-<a href="/add-by-file">Wprowadź dane z pliku do analizy</a>
-<br>
-<a href="/data-view">Wyświetl dane i wyniki</a>
+
+<button onclick="window.location.href='/add-by-keyboard'">Wprowadź dane do analizy</button>
+
+<button onclick="window.location.href='/add-by-file'">Wprowadź dane z pliku do analizy</button>
+
+<button onclick="window.location.href='/data-view'">Wyświetl dane i wyniki</button>
 </body>
 </html>

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Dane do analizy</title>
     <style>
+      body {
+        background-color: #f5f5dc;
+        margin: 0;
+        padding: 0;
+      }
+
       label{
         display: block;
       }
@@ -15,17 +21,22 @@
     <label>
       Masa przed tarciem:
       <input name="massBeforeFriction" type="text" pattern="[0-9]+([,.][0-9]+)?" step="any">
+      [g]
     </label>
     <label>
       Masa po tarciu:
       <input name="massAfterFriction" type="text" pattern="[0-9]+([,.][0-9]+)?" step="any">
+      [g]
     </label>
     <label>
       Siła nacisku:
       <input name="pressureForce" type="text" pattern="[0-9]+([,.][0-9]+)?" step="any">
+      [N]
     </label>
       <br>
     <button type="submit">Zapisz dane</button>
   </form>
+  <br>
+  <button onclick="window.location.href='/'">Wróć</button>
 </body>
 </html>

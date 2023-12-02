@@ -2,29 +2,63 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wprowadzone dane</title>
   <style>
+    body {
+      background-color: #f5f5dc;
+      margin: 0;
+      padding: 0;
+    }
+
     a{
       display: block;
     }
+
     table{
+      background-color: #ffffff;
       border: 1px solid black;
       border-collapse: collapse;
       max-width: 500px;
       width: 100%;
     }
+
     td{
       border: 1px solid black;
     }
+
+    button {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .horizontal-buttons {
+      display: flex;
+    }
+
+    .horizontal-buttons button {
+      margin-right: 10px;
+    }
+
+    .chart-section {
+      background-color: #ffffff;
+      height: 400px;
+      width: 100%;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>Wprowadzone dane oraz wyniki kalkulacji</h1>
-  <a href="/add-by-keyboard">Wprowadź dane</a>
-  <br>
-  <a href="/add-by-file">Wprowadź dane z pliku</a>
-  <br>
-  <a href="/">Wróć</a>
+
+  <button onclick="window.location.href='/add-by-keyboard'">Wprowadź dane</button>
+  <button onclick="window.location.href='/add-by-file'">Wprowadź dane z pliku</button>
+  <button onclick="window.location.href='/'">Wróć</button>
+
   <section th:unless="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}">
     <h3>Poniżej znajdują się wprowadzone dane: </h3>
     <p>Masa przed tarciem = <span th:text="${data.getMassBeforeFriction()}">10.0</span>g</p>
@@ -36,17 +70,198 @@
     <p>&Delta;m [%] = <span th:text="${deltaMassInPercent}">90.0</span>%</p>
 
     <h3>Wyliczenia dotyczące siły: </h3>
-    <p>Średnia siła tarcia = <span th:text="${averageForce}">23.23</span>N</p>
-    <p>Współczynnik tarcia= <span th:text="${coefficientFriction}">63.0</span>&micro;</p>
+    <div th:unless="${fileDataList.isEmpty()}">
+      <p>Średnia siła tarcia = <span th:text="${averageForce}">23.23</span>N</p>
+      <p>Współczynnik tarcia= <span th:text="${coefficientFriction}">63.0</span>&micro;</p>
+    </div>
+    <h4 th:if="${fileDataList.isEmpty()}" style="color: indianred">
+      Średnia siła i współczynnik tarcia zostaną wyliczone po wprowadzeniu danych z pliku
+    </h4>
+
   </section>
 
   <h2 th:if="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}"
-      style="color: indianred">Brak danych</h2>
+      style="color: indianred">Brak danych od użytkownika</h2>
 
   <hr>
 
   <section th:unless="${fileDataList.isEmpty()}">
-    <p>Poniżej znajduje się tabela z wynikami otrzymanymi z próby</p>
+    <h2>Wykresy:</h2>
+    <div class="horizontal-buttons">
+      <button onclick="showDiv(1)">Wykres siły tarcia od czasu</button>
+      <button onclick="showDiv(2)">Wykres głębokość wytarcia od czasu</button>
+      <button onclick="showDiv(3)">Wykres temperatury od czasu</button>
+      <button onclick="showDiv(4)">Pokaż wszystkie wykresy</button>
+    </div>
+
+    <div id="div1">
+      <h2>Wykres siły tarcia od czasu</h2>
+      <section class="chart-section">
+        <canvas id="myChart1" width="800" height="400"></canvas>
+        <script th:inline="javascript">
+          //Pobieranie danych do skryptu
+          var dataList1 = /*[[${fileDataList}]]*/ [];
+          var timeArray1 = dataList1.map(function (data) { return data.time; });
+          var frictionForceArray = dataList1.map(function (data) { return data.frictionForce; });
+
+          // Tworzenie wykresu
+          var ctx = document.getElementById('myChart1').getContext('2d');
+          var myChart1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: timeArray1,
+              datasets: [{
+                label: 'Siła tarcia',
+                data: frictionForceArray,
+                borderColor: 'rgb(0,41,182)',
+                borderWidth: 1,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  type: 'linear',
+                  position: 'bottom',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Czas [s]'
+                  }
+                },
+                y: {
+                  min: 0,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Siła tarcia [N]'
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </section>
+    </div>
+    <div id="div2" class="hidden">
+      <h2>Wykres głębokość wytarcia od czasu</h2>
+      <section class="chart-section">
+        <canvas id="myChart2" width="800" height="400"></canvas>
+        <script th:inline="javascript">
+          //Pobieranie danych do skryptu
+          var dataList2 = /*[[${fileDataList}]]*/ [];
+          var timeArray2 = dataList2.map(function (data) { return data.time; });
+          var penetrationDepthArray = dataList2.map(function (data) { return data.penetrationDepth; });
+
+          // Tworzenie wykresu
+          var ctx = document.getElementById('myChart2').getContext('2d');
+          var myChart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: timeArray2,
+              datasets: [{
+                label: 'Głębokość wytarcia',
+                data: penetrationDepthArray,
+                borderColor: 'rgb(12,138,0)',
+                borderWidth: 1,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  type: 'linear',
+                  position: 'bottom',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Czas [s]'
+                  }
+                },
+                y: {
+                  min: 0,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Głębokość wytarcia [mm]'
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </section>
+    </div>
+    <div id="div3" class="hidden">
+      <h2>Wykres temperatury od czasu</h2>
+      <section class="chart-section">
+        <canvas id="myChart3" width="800" height="400"></canvas>
+        <script th:inline="javascript">
+          //Pobieranie danych do skryptu
+          var dataList3 = /*[[${fileDataList}]]*/ [];
+          var timeArray3 = dataList3.map(function (data) { return data.time; });
+          var temperatureArray = dataList3.map(function (data) { return data.temperature; });
+
+          // Tworzenie wykresu
+          var ctx = document.getElementById('myChart3').getContext('2d');
+          var myChart3 = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: timeArray3,
+              datasets: [{
+                label: 'Temperatura',
+                data: temperatureArray,
+                borderColor: 'rgb(168,0,0)',
+                borderWidth: 1,
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  type: 'linear',
+                  position: 'bottom',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Czas [s]'
+                  }
+                },
+                y: {
+                  min: 0,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Temperatura [°C]'
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </section>
+    </div>
+    <script th:inline="javascript">
+      function showDiv(divNumber) {
+        var divs = document.querySelectorAll('[id^="div"]');
+
+        for (var i = 0; i < divs.length; i++) {
+          if (divNumber === 4 || i + 1 === divNumber) {
+            divs[i].style.display = 'block';
+          } else {
+            divs[i].style.display = 'none';
+          }
+        }
+      }
+    </script>
+  </section>
+
+  <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych do wyświetlenia wykresów</h2>
+
+  <hr>
+
+  <section th:unless="${fileDataList.isEmpty()}">
+    <h3>Poniżej znajduje się tabela z wynikami otrzymanymi z próby:</h3>
     <table>
       <thead>
       <tr>
@@ -68,6 +283,6 @@
   </section>
   <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
   <br>
-  <a href="/">Wróć</a>
+  <button onclick="window.location.href='/'">Wróć</button>
 </body>
 </html>
