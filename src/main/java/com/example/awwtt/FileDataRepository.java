@@ -1,5 +1,5 @@
 package com.example.awwtt;
-import org.springframework.core.io.ClassPathResource;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -15,19 +15,14 @@ public class FileDataRepository {
 
     private final List<FileData> fileDataList = new ArrayList<>();
 
-    public void readDataFromAscFile(String fileName) {
+    public void readDataFromStream(InputStream inputStream) {
         try {
-            // Wczytaj plik z folderu resources
-            ClassPathResource resource = new ClassPathResource(fileName);
-            InputStream inputStream = resource.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            // Pominięcie 41 pierwszych wierszy
             for (int i = 0; i < 38; i++) {
                 reader.readLine();
             }
 
-            // Wczytywanie danych od linii 42
             String line;
             while ((line = reader.readLine()) != null) {
                 FileData fileData = parseFileDataFromLine(line);
@@ -43,7 +38,6 @@ public class FileDataRepository {
     private FileData parseFileDataFromLine(String line) {
         String[] tokens = line.split("\t");
 
-        // Pobranie wyłącznie 4 liczb zmiennoprzecinkowych
         double time = parseDouble(tokens, 0);
         double frictionForce = parseDouble(tokens, 1);
         double penetrationDepth = parseDouble(tokens, 2);
@@ -54,14 +48,13 @@ public class FileDataRepository {
 
     private double parseDouble(String[] tokens, int index) {
         if (index < tokens.length) {
-            // Zamiana przecinka na kropkę i parsowanie do Double
             String formattedToken = StringUtils.replace(tokens[index], ",", ".");
             return Double.parseDouble(formattedToken);
         }
-        return 0.0; // Domyślna wartość, jeśli brak odpowiedniego tokenu
+        return 0.0;
     }
 
-    List<FileData> findFileData(){
+    List<FileData> findFileData() {
         return fileDataList;
     }
 }

@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Dodaj plik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wczytywanie pliku</title>
     <style>
+        #dropArea {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            text-align: center;
+            padding: 10px;
+            margin: 20px;
+            background-color: #ffffff;
+        }
         body {
             background-color: #f5f5dc;
             margin: 0;
@@ -16,15 +26,75 @@
     </style>
 </head>
 <body>
-  <h1>Dodaj plik</h1>
-  <form method="post" action="/save-file">
-      <label>
-          Nazwa pliku:
-          <input name="fileName" type="text" step="any">
-      </label>
-      <button type="submit">Wprowadź plik</button>
-  </form>
-  <br>
-  <button onclick="window.location.href='/'">Wróć</button>
+
+<h1>Wczytywanie danych z pliku</h1>
+
+<div id="dropArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+    Przeciągnij i upuść plik tutaj
+</div>
+
+<form id="uploadFormByDrop" action="/save-file" method="post" enctype="multipart/form-data">
+    <input type="file" id="fileInputByDrop" name="file" style="display: none;" onchange="submitFormByDrop()">
+</form>
+
+<script>
+    function handleDragOver(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+
+        var files = event.dataTransfer.files;
+        if (files.length > 0) {
+            var file = files[0];
+            submitFormByDrop(file);
+        }
+    }
+
+    function submitFormByDrop(file) {
+        var form = document.getElementById('uploadFormByDrop');
+        var formData = new FormData(form);
+        formData.set('file', file);
+
+        fetch('/save-file', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+    }
+</script>
+
+<form id="uploadFormByDrag" action="/save-file" method="post" enctype="multipart/form-data">
+    <label for="fileInputByDrag">Lub wybierz plik zapisany na dysku:</label>
+    <input type="file" id="fileInputByDrag" name="file" style="display: none;" onchange="submitFormByDrag()">
+    <button type="button" onclick="document.getElementById('fileInputByDrag').click()">Wprowadź plik</button>
+</form>
+
+<script>
+    var uploadedFile;
+
+    function submitFormByDrag() {
+        var form = document.getElementById('uploadFormByDrag');
+        var formData = new FormData(form);
+
+        fetch('/save-file', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                uploadedFile = data.fileContent;
+            })
+            .catch(error => console.error(error));
+    }
+</script>
+
+<br>
+<button onclick="window.location.href='/'">Wróć</button>
 </body>
 </html>
