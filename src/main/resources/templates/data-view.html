@@ -7,17 +7,15 @@
   <style>
     body {
       background-color: #f5f5dc;
-      margin: 0;
       padding: 0;
-    }
-
-    a{
-      display: block;
+      margin-bottom: 20px;
+      margin-left: 20px;
+      margin-right: 20px;
     }
 
     table{
       background-color: #ffffff;
-      border: 1px solid black;
+      border: 2px solid black;
       border-collapse: collapse;
       max-width: 500px;
       width: 100%;
@@ -28,8 +26,13 @@
     }
 
     button {
-      display: block;
-      margin-bottom: 10px;
+      display: flex;
+      width: 33%;
+      height: 40px;
+      border: 2px solid rgba(213, 198, 3, 0.99);
+      border-radius: 5px;
+      opacity: 0.8;
+      background-color: rgba(234, 223, 17, 0.99)
     }
 
     .hidden {
@@ -41,13 +44,32 @@
     }
 
     .horizontal-buttons button {
-      margin-right: 10px;
+      margin-right: 3px;
     }
 
     .chart-section {
       background-color: #ffffff;
       height: 400px;
       width: 100%;
+      margin: 0;
+    }
+
+    .chart-section-for-frictionForce{
+      background-color: #ffffff;
+      height: 400px;
+      margin: 0;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+    }
+
+    button:hover{
+      opacity: 1;
+      background: rgba(234, 223, 17, 0.99);
+      transition: ease-in-out;
+      transition-duration: 300ms;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,9 +77,11 @@
 <body>
   <h1>Wprowadzone dane oraz wyniki kalkulacji</h1>
 
-  <button onclick="window.location.href='/add-by-keyboard'">Wprowadź dane</button>
-  <button onclick="window.location.href='/add-by-file'">Wprowadź dane z pliku</button>
-  <button onclick="window.location.href='/'">Wróć</button>
+  <div class="horizontal-buttons">
+    <button onclick="window.location.href='/add-by-keyboard'">Wprowadź dane</button>
+    <button onclick="window.location.href='/add-by-file'">Wprowadź dane z pliku</button>
+    <button onclick="window.location.href='/'">Wróć</button>
+  </div>
 
   <section th:unless="${data.getMassBeforeFriction() eq 0.0 or data.getMassAfterFriction() eq 0.0 or data.getPressureForce() eq 0.0}">
     <h3>Poniżej znajdują się wprowadzone dane: </h3>
@@ -94,17 +118,17 @@
       <button onclick="showDiv(4)">Pokaż wszystkie wykresy</button>
     </div>
 
-    <div id="div1">
+    <div id="div1" style="overflow-x:scroll; height:490px;">
       <h2>Wykres siły tarcia od czasu</h2>
-      <section class="chart-section">
-        <canvas id="myChart1" width="800" height="400"></canvas>
+      <section class="chart-section-for-frictionForce">
+        <canvas id="myChart1"></canvas>
         <script th:inline="javascript">
-          //Pobieranie danych do skryptu
           var dataList1 = /*[[${fileDataList}]]*/ [];
           var timeArray1 = dataList1.map(function (data) { return data.time; });
           var frictionForceArray = dataList1.map(function (data) { return data.frictionForce; });
 
-          // Tworzenie wykresu
+          var containerWidth = dataList1.length <= 1002 ? "100%" : (dataList1.length) + "px";
+
           var ctx = document.getElementById('myChart1').getContext('2d');
           var myChart1 = new Chart(ctx, {
             type: 'line',
@@ -140,6 +164,9 @@
               }
             }
           });
+           if(dataList1.length >= 1002){
+             document.querySelector('.chart-section-for-frictionForce').style.width = containerWidth;
+           }
         </script>
       </section>
     </div>
@@ -148,12 +175,10 @@
       <section class="chart-section">
         <canvas id="myChart2" width="800" height="400"></canvas>
         <script th:inline="javascript">
-          //Pobieranie danych do skryptu
           var dataList2 = /*[[${fileDataList}]]*/ [];
           var timeArray2 = dataList2.map(function (data) { return data.time; });
           var penetrationDepthArray = dataList2.map(function (data) { return data.penetrationDepth; });
 
-          // Tworzenie wykresu
           var ctx = document.getElementById('myChart2').getContext('2d');
           var myChart2 = new Chart(ctx, {
             type: 'line',
@@ -197,12 +222,10 @@
       <section class="chart-section">
         <canvas id="myChart3" width="800" height="400"></canvas>
         <script th:inline="javascript">
-          //Pobieranie danych do skryptu
           var dataList3 = /*[[${fileDataList}]]*/ [];
           var timeArray3 = dataList3.map(function (data) { return data.time; });
           var temperatureArray = dataList3.map(function (data) { return data.temperature; });
 
-          // Tworzenie wykresu
           var ctx = document.getElementById('myChart3').getContext('2d');
           var myChart3 = new Chart(ctx, {
             type: 'line',
@@ -261,25 +284,27 @@
   <hr>
 
   <section th:unless="${fileDataList.isEmpty()}">
-    <h3>Poniżej znajduje się tabela z wynikami otrzymanymi z próby:</h3>
-    <table>
-      <thead>
-      <tr>
-        <td>Czas [s]</td>
-        <td>Siła tarcia [N]</td>
-        <td>Głębokość wytarcia [mm]</td>
-        <td>T [°C]</td>
-      </tr>
-      </thead>
-      <tbody>
+    <h3 class="center">Poniżej znajduje się tabela z wynikami otrzymanymi z próby:</h3>
+    <div class="center">
+      <table>
+        <thead>
+        <tr>
+          <td>Czas [s]</td>
+          <td>Siła tarcia [N]</td>
+          <td>Głębokość wytarcia [mm]</td>
+          <td>T [°C]</td>
+        </tr>
+        </thead>
+        <tbody>
         <tr th:each="fileData: ${fileDataList}" th:object="${fileData}">
           <td th:text="*{time}">0.000</td>
           <td th:text="*{frictionForce}">22.752</td>
           <td th:text="*{penetrationDepth}">5.625</td>
           <td th:text="*{temperature}">17.596</td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </section>
   <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
   <br>

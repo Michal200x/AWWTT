@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wczytywanie pliku</title>
     <style>
+        #ui-button{
+            background-color: grey;
+        }
         #dropArea {
             width: 300px;
             height: 200px;
@@ -62,6 +65,7 @@
             method: 'POST',
             body: formData
         })
+            .then(buttonColor())
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.error(error));
@@ -71,7 +75,7 @@
 <form id="uploadFormByDrag" action="/save-file" method="post" enctype="multipart/form-data">
     <label for="fileInputByDrag">Lub wybierz plik zapisany na dysku:</label>
     <input type="file" id="fileInputByDrag" name="file" style="display: none;" onchange="submitFormByDrag()">
-    <button type="button" onclick="document.getElementById('fileInputByDrag').click()">Wprowadź plik</button>
+    <button type="button" id="ui-button" onclick="document.getElementById('fileInputByDrag').click()">Wprowadź plik</button>
 </form>
 
 <script>
@@ -90,7 +94,13 @@
                 console.log(data);
                 uploadedFile = data.fileContent;
             })
+            .then(buttonColor())
             .catch(error => console.error(error));
+    }
+
+    function buttonColor(){
+        document.getElementById('ui-button').style.backgroundColor="#5cd65c";
+        document.getElementById('ui-button').textContent='Poprawnie wczytano plik';
     }
 </script>
 
