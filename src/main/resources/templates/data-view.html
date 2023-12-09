@@ -26,13 +26,17 @@
     }
 
     button {
-      display: flex;
-      width: 33%;
+      width: 33.33%;
       height: 40px;
+      padding: 10px;
       border: 2px solid rgba(213, 198, 3, 0.99);
       border-radius: 5px;
       opacity: 0.8;
-      background-color: rgba(234, 223, 17, 0.99)
+      background-color: rgba(234, 223, 17, 0.99);
+      display: inline-block;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
     }
 
     .hidden {
@@ -307,7 +311,5 @@
     </div>
   </section>
   <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
-  <br>
-  <button onclick="window.location.href='/'">Wróć</button>
 </body>
 </html>
