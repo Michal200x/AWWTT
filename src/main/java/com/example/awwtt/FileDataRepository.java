@@ -46,7 +46,7 @@ public class FileDataRepository {
         return new FileData(time, frictionForce, penetrationDepth, temperature);
     }
 
-    private double parseDouble(String[] tokens, int index) {
+    double parseDouble(String[] tokens, int index) {
         if (index < tokens.length) {
             String formattedToken = StringUtils.replace(tokens[index], ",", ".");
             return Double.parseDouble(formattedToken);
