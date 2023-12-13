@@ -4,78 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wprowadzone dane</title>
-  <style>
-    body {
-      background-color: #f5f5dc;
-      padding: 0;
-      margin-bottom: 20px;
-      margin-left: 20px;
-      margin-right: 20px;
-    }
-
-    table{
-      background-color: #ffffff;
-      border: 2px solid black;
-      border-collapse: collapse;
-      max-width: 500px;
-      width: 100%;
-    }
-
-    td{
-      border: 1px solid black;
-    }
-
-    button {
-      width: 33.33%;
-      height: 40px;
-      padding: 10px;
-      border: 2px solid rgba(213, 198, 3, 0.99);
-      border-radius: 5px;
-      opacity: 0.8;
-      background-color: rgba(234, 223, 17, 0.99);
-      display: inline-block;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .horizontal-buttons {
-      display: flex;
-    }
-
-    .horizontal-buttons button {
-      margin-right: 3px;
-    }
-
-    .chart-section {
-      background-color: #ffffff;
-      height: 400px;
-      width: 100%;
-      margin: 0;
-    }
-
-    .chart-section-for-frictionForce{
-      background-color: #ffffff;
-      height: 400px;
-      margin: 0;
-    }
-
-    .center {
-      display: flex;
-      justify-content: center;
-    }
-
-    button:hover{
-      opacity: 1;
-      background: rgb(187, 177, 0);
-      transition: ease-in-out;
-      transition-duration: 300ms;
-    }
-  </style>
+    <link rel="stylesheet" href="../static/dataViewStyle.css" th:href="@{dataViewStyle.css}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>

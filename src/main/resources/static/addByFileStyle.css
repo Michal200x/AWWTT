@@ -1,0 +1,51 @@
+#ui-button{
+    background-color: #bebebe;
+}
+#dropArea {
+    width: 300px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+body {
+    background-color: #f5f5dc;
+    text-align: center;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+button {
+    padding: 10px;
+    border: 2px solid rgba(213, 198, 3, 0.99);
+    border-radius: 5px;
+    opacity: 0.8;
+    background-color: rgba(234, 223, 17, 0.99);
+    margin-bottom: 5px;
+}
+
+.button{
+    width: 400px;
+    height: 40px;
+    padding: 10px;
+    display: inline-block;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+button:hover{
+    opacity: 1;
+    background: rgb(187, 177, 0);
+    transition: ease-in-out;
+    transition-duration: 300ms;
+}
