@@ -17,6 +17,7 @@ public class DataController {
     private final MassCalculation massCalculation;
     private final FileDataRepository fileDataRepository;
     private final FrictionCalculation frictionCalculation;
+    private static int fileNum = 0;
 
     public DataController(DataRepository dataRepository, MassCalculation massCalculation,
                           FileDataRepository fileDataRepository, FrictionCalculation frictionCalculation) {
@@ -49,7 +50,8 @@ public class DataController {
     String saveDataFromFile(@RequestParam("file") MultipartFile file) {
         try {
             InputStream inputStream = file.getInputStream();
-            fileDataRepository.readDataFromStream(inputStream);
+            fileDataRepository.readDataFromStream(fileNum, inputStream);
+            fileNum++;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +63,7 @@ public class DataController {
         model.addAttribute("data", dataRepository.findData());
         model.addAttribute("deltaMass", massCalculation.calculateDeltaMass());
         model.addAttribute("deltaMassInPercent", massCalculation.calculateDeltaMassInPercent());
-        model.addAttribute("fileDataList", fileDataRepository.findFileData());
+        model.addAttribute("fileDataMap", fileDataRepository.findAllFileData());
         model.addAttribute("averageForce", frictionCalculation.calculateAverageForce());
         model.addAttribute("coefficientFriction", frictionCalculation.calculateCoefficientFriction());
         return "data-view";

@@ -26,12 +26,13 @@ public class FileDataRepositoryTest {
 
         String fileContent = fileContentBuilder.toString();
 
+        int id = 1;
         InputStream inputStream = new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8));
         FileDataRepository fileDataRepository = new FileDataRepository();
 
         // When
-        fileDataRepository.readDataFromStream(inputStream);
-        List<FileData> result = fileDataRepository.findFileData();
+        fileDataRepository.readDataFromStream(id, inputStream);
+        List<FileData> result = fileDataRepository.findLatestFileData();
 
         // Then
         assertNotNull(result);

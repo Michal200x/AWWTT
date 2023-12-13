@@ -27,11 +27,11 @@
     <p>&Delta;m [%] = <span th:text="${deltaMassInPercent}">90.0</span>%</p>
 
     <h3>Wyliczenia dotyczące siły: </h3>
-    <div th:unless="${fileDataList.isEmpty()}">
+    <div th:unless="${fileDataMap.isEmpty()}">
       <p>Średnia siła tarcia = <span th:text="${averageForce}">23.23</span>N</p>
       <p>Współczynnik tarcia= <span th:text="${coefficientFriction}">63.0</span>&micro;</p>
     </div>
-    <h4 th:if="${fileDataList.isEmpty()}" style="color: indianred">
+    <h4 th:if="${fileDataMap.isEmpty()}" style="color: indianred">
       Średnia siła i współczynnik tarcia zostaną wyliczone po wprowadzeniu danych z pliku
     </h4>
 
@@ -42,7 +42,7 @@
 
   <hr>
 
-  <section th:unless="${fileDataList.isEmpty()}">
+  <section th:unless="${fileDataMap.isEmpty()}">
     <h2>Wykresy:</h2>
     <div class="horizontal-buttons">
       <button onclick="showDiv(1)">Wykres siły tarcia od czasu</button>
@@ -51,29 +51,46 @@
       <button onclick="showDiv(4)">Pokaż wszystkie wykresy</button>
     </div>
 
+<!--/////////////////////////////////////////////////-->
+<!--////// Chart of friction force versus time //////-->
+<!--/////////////////////////////////////////////////-->
+
     <div id="div1" style="overflow-x:scroll; height:490px;">
       <h2>Wykres siły tarcia od czasu</h2>
       <section class="chart-section-for-frictionForce">
         <canvas id="myChart1"></canvas>
         <script th:inline="javascript">
-          var dataList1 = /*[[${fileDataList}]]*/ [];
-          var timeArray1 = dataList1.map(function (data) { return data.time; });
-          var frictionForceArray = dataList1.map(function (data) { return data.frictionForce; });
+          var fileDataMap1 = /*[[${fileDataMap}]]*/ {};
+          var datasets = [];
+          var totalDataLength = 0;
+          var longestTimeArray = [];
 
-          var containerWidth = dataList1.length <= 1002 ? "100%" : (dataList1.length) + "px";
+          Object.keys(fileDataMap1).forEach((key, index) => {
+            var timeArray = fileDataMap1[key].map(fileData => fileData.time);
+            var frictionForceArray = fileDataMap1[key].map(fileData => fileData.frictionForce);
+            totalDataLength += fileDataMap1[key].length;
+            if (timeArray.length > longestTimeArray.length) {
+              longestTimeArray = timeArray;
+            }
+
+            datasets.push({
+              label: 'Zestaw danych ' + (index + 1),
+              data: frictionForceArray,
+              borderColor: getRandomColor(), // Funkcja do generowania losowego koloru
+              borderWidth: 1,
+              fill: false,
+              tension: 0.1
+            });
+          });
+
+          var containerWidth = totalDataLength <= 1001 ? "100%" : totalDataLength + "px";
 
           var ctx = document.getElementById('myChart1').getContext('2d');
           var myChart1 = new Chart(ctx, {
             type: 'line',
             data: {
-              labels: timeArray1,
-              datasets: [{
-                label: 'Siła tarcia',
-                data: frictionForceArray,
-                borderColor: 'rgb(0,41,182)',
-                borderWidth: 1,
-                fill: false
-              }]
+              labels: longestTimeArray,
+              datasets: datasets
             },
             options: {
               responsive: true,
@@ -97,33 +114,59 @@
               }
             }
           });
-           if(dataList1.length >= 1002){
-             document.querySelector('.chart-section-for-frictionForce').style.width = containerWidth;
-           }
+
+          if (totalDataLength > 1001) {
+            document.querySelector('.chart-section-for-frictionForce').style.width = containerWidth;
+          }
+
+          function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+          }
         </script>
       </section>
     </div>
+
+<!--/////////////////////////////////////////////////-->
+<!--//// Chart of penetration depth versus time /////-->
+<!--/////////////////////////////////////////////////-->
+
     <div id="div2" class="hidden">
       <h2>Wykres głębokość wytarcia od czasu</h2>
       <section class="chart-section">
         <canvas id="myChart2" width="800" height="400"></canvas>
         <script th:inline="javascript">
-          var dataList2 = /*[[${fileDataList}]]*/ [];
-          var timeArray2 = dataList2.map(function (data) { return data.time; });
-          var penetrationDepthArray = dataList2.map(function (data) { return data.penetrationDepth; });
+          var fileDataMap2 = /*[[${fileDataMap}]]*/ {};
+          var datasets = [];
+          var longestTimeArray = [];
+
+          Object.keys(fileDataMap2).forEach((key, index) => {
+            var timeArray = fileDataMap2[key].map(fileData => fileData.time);
+            var penetrationDepthArray = fileDataMap2[key].map(fileData => fileData.penetrationDepth);
+            if (timeArray.length > longestTimeArray.length) {
+              longestTimeArray = timeArray;
+            }
+
+            datasets.push({
+              label: 'Zestaw danych ' + (index + 1),
+              data: penetrationDepthArray,
+              borderColor: getRandomColor(),
+              borderWidth: 1,
+              fill: false,
+              tension: 0.1
+            });
+          });
 
           var ctx = document.getElementById('myChart2').getContext('2d');
           var myChart2 = new Chart(ctx, {
             type: 'line',
             data: {
-              labels: timeArray2,
-              datasets: [{
-                label: 'Głębokość wytarcia',
-                data: penetrationDepthArray,
-                borderColor: 'rgb(12,138,0)',
-                borderWidth: 1,
-                fill: false
-              }]
+              labels: longestTimeArray,
+              datasets: datasets
             },
             options: {
               responsive: true,
@@ -147,30 +190,55 @@
               }
             }
           });
+
+          function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+          }
         </script>
       </section>
     </div>
+
+<!--/////////////////////////////////////////////////-->
+<!--/////// Chart of temperature versus time ////////-->
+<!--/////////////////////////////////////////////////-->
+
     <div id="div3" class="hidden">
       <h2>Wykres temperatury od czasu</h2>
       <section class="chart-section">
         <canvas id="myChart3" width="800" height="400"></canvas>
         <script th:inline="javascript">
-          var dataList3 = /*[[${fileDataList}]]*/ [];
-          var timeArray3 = dataList3.map(function (data) { return data.time; });
-          var temperatureArray = dataList3.map(function (data) { return data.temperature; });
+          var fileDataMap3 = /*[[${fileDataMap}]]*/ {};
+          var datasets = [];
+          var longestTimeArray = [];
+
+          Object.keys(fileDataMap3).forEach((key, index) => {
+            var timeArray = fileDataMap3[key].map(fileData => fileData.time);
+            var temperatureArray = fileDataMap3[key].map(fileData => fileData.temperature);
+            if (timeArray.length > longestTimeArray.length) {
+              longestTimeArray = timeArray;
+            }
+
+            datasets.push({
+              label: 'Zestaw danych ' + (index + 1),
+              data: temperatureArray,
+              borderColor: getRandomColor(),
+              borderWidth: 1,
+              fill: false,
+              tension: 0.1
+            });
+          });
 
           var ctx = document.getElementById('myChart3').getContext('2d');
           var myChart3 = new Chart(ctx, {
             type: 'line',
             data: {
-              labels: timeArray3,
-              datasets: [{
-                label: 'Temperatura',
-                data: temperatureArray,
-                borderColor: 'rgb(168,0,0)',
-                borderWidth: 1,
-                fill: false
-              }]
+              labels: longestTimeArray,
+              datasets: datasets
             },
             options: {
               responsive: true,
@@ -194,9 +262,19 @@
               }
             }
           });
+
+          function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+          }
         </script>
       </section>
     </div>
+
     <script th:inline="javascript">
       function showDiv(divNumber) {
         var divs = document.querySelectorAll('[id^="div"]');
@@ -212,11 +290,11 @@
     </script>
   </section>
 
-  <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych do wyświetlenia wykresów</h2>
+  <h2 th:if="${fileDataMap.isEmpty()}" style="color: indianred">Brak danych do wyświetlenia wykresów</h2>
 
   <hr>
 
-  <section th:unless="${fileDataList.isEmpty()}">
+  <section th:unless="${fileDataMap.isEmpty()}">
     <h3 class="center">Poniżej znajduje się tabela z wynikami otrzymanymi z próby:</h3>
     <div class="center">
       <table>
@@ -229,7 +307,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="fileData: ${fileDataList}" th:object="${fileData}">
+        <tr th:each="fileData: ${fileDataMap.get(fileDataMap.size() - 1)}" th:object="${fileData}">
           <td th:text="*{time}">0.000</td>
           <td th:text="*{frictionForce}">22.752</td>
           <td th:text="*{penetrationDepth}">5.625</td>
@@ -239,6 +317,6 @@
       </table>
     </div>
   </section>
-  <h2 th:if="${fileDataList.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
+  <h2 th:if="${fileDataMap.isEmpty()}" style="color: indianred">Brak danych z pliku</h2>
 </body>
 </html>
