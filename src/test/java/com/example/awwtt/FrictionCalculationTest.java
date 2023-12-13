@@ -24,7 +24,7 @@ public class FrictionCalculationTest {
     @Test
     public void testCalculateAverageForceWithEmptyFileData() {
         // Given
-        when(fileDataRepository.findFileData()).thenReturn(new ArrayList<>());
+        when(fileDataRepository.findLatestFileData()).thenReturn(new ArrayList<>());
 
         // When
         double result = frictionCalculation.calculateAverageForce();
@@ -39,7 +39,7 @@ public class FrictionCalculationTest {
         List<FileData> fileDataList = new ArrayList<>();
         fileDataList.add(new FileData(1, 10.0, 15.0, 20.00));
         fileDataList.add(new FileData(2, 15.0, 20.0, 25.00));
-        when(fileDataRepository.findFileData()).thenReturn(fileDataList);
+        when(fileDataRepository.findLatestFileData()).thenReturn(fileDataList);
 
         // When
         double result = frictionCalculation.calculateAverageForce();

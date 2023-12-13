@@ -2,6 +2,8 @@ package com.example.awwtt;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FrictionCalculation {
     private final FileDataRepository fileDataRepository;
@@ -12,21 +14,27 @@ public class FrictionCalculation {
         this.dataRepository = dataRepository;
     }
 
-    public double calculateAverageForce (){
-        if (fileDataRepository.findFileData() == null || fileDataRepository.findFileData().isEmpty()) {
+    public double calculateAverageForce() {
+        List<FileData> latestFileData = fileDataRepository.findLatestFileData();
+        if (latestFileData.isEmpty()) {
             return 0.0;
         }
 
         double sum = 0.0;
 
-        for (FileData fileData : fileDataRepository.findFileData()) {
+        for (FileData fileData : latestFileData) {
             sum += fileData.getFrictionForce();
         }
 
-        return sum / fileDataRepository.findFileData().size();
+        return sum / latestFileData.size();
     }
 
-    public double calculateCoefficientFriction(){
-        return calculateAverageForce()/(50 * dataRepository.findData().getPressureForce());
+    public double calculateCoefficientFriction() {
+        double averageForce = calculateAverageForce();
+        double pressureForce = dataRepository.findData().getPressureForce();
+        if (pressureForce == 0) {
+            return 0;
+        }
+        return averageForce / (50 * pressureForce);
     }
 }

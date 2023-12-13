@@ -7,15 +7,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class FileDataRepository {
 
-    private final List<FileData> fileDataList = new ArrayList<>();
+    private final Map<Integer, List<FileData>> fileDataMap = new HashMap<>();
 
-    public void readDataFromStream(InputStream inputStream) {
+    public void readDataFromStream(int fileNum, InputStream inputStream) {
+        List<FileData> fileDataList = new ArrayList<>();
+
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -33,6 +34,8 @@ public class FileDataRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        fileDataMap.put(fileNum, fileDataList);
     }
 
     private FileData parseFileDataFromLine(String line) {
@@ -54,7 +57,16 @@ public class FileDataRepository {
         return 0.0;
     }
 
-    List<FileData> findFileData() {
-        return fileDataList;
+    public Map<Integer, List<FileData>> findAllFileData() {
+        return fileDataMap;
+    }
+
+    public List<FileData> findLatestFileData() {
+        if (fileDataMap.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Integer lastKey = Collections.max(fileDataMap.keySet());
+        return fileDataMap.get(lastKey);
     }
 }
