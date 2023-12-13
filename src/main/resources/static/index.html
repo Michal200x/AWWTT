@@ -1,53 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Strona główna</title>
-    <style>
-        body {
-            background-color: #f5f5dc;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        button {
-            border: 2px solid rgba(213, 198, 3, 0.99);
-            border-radius: 5px;
-            opacity: 0.8;
-            background-color: rgba(234, 223, 17, 0.99);
-        }
-
-        .button{
-            width: 400px;
-            height: 40px;
-            padding: 10px;
-            display: inline-block;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        button:hover{
-            opacity: 1;
-            background: rgb(187, 177, 0);
-            transition: ease-in-out;
-            transition-duration: 300ms;
-        }
-
-        .centered-div {
-            text-align: center;
-        }
-
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            height: 100vh;
-        }
-
-    </style>
+    <link rel="stylesheet" href="indexStyle.css" th:href="@{indexStyle.css}">
 </head>
 <body>
 <h1>Aplikacja do analizy i wizualizacji wyników testu tribologicznego</h1>
