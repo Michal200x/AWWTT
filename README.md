@@ -16,7 +16,7 @@ Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od insta
    ```
    cd C:\sciezka\do\glownego\katalogu\aplikacji
    ```
-   ![readme-png\copy-path](readme-png\copy-path.png)
+   ![readme-png/copy-path](readme-png/copy-path.png)
    Za ścieżkę po "cd" przekopiuj ścieżkę z katalogu gdzie zapisałeś/aś aplikację
 
 4. Zbuduj obraz Docker swojej aplikacji:
