@@ -8,7 +8,7 @@ Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od insta
     - Aby sprawdzić czy masz włączoną wirtualizację wpisz informacje o systemie w pasek wyszukiwania windows a następnie przejdź na sam dół strony
     - Sprawdz czy jak na zdięciu poniżej pisze uruchomiona
 
-    ![wirtualizacja/wirtualizacja.png](wirtualizacja/wirtualizacja.png)
+    ![readme-png/wirtualizacja.png](readme-png/wirtualizacja.png)
 
 2. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/get-started/).
 3. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
