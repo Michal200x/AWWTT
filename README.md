@@ -1,10 +1,10 @@
 # Uruchomienie aplikacji AWWTT
 
-Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Docker, od instalacji Docker do uruchomienia aplikacji.
+Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od instalacji Dockera do uruchomienia aplikacji.
 
 ## Instalacja Docker (Ten krok wykonujemy włącznie kiedy nie mamy zainstalowanej aplikacji Docker desktop)
 
-1. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/products/docker-desktop).
+1. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/get-started/).
 2. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
 
 ## Uruchomienie Aplikacji
