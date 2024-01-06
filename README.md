@@ -9,7 +9,7 @@ Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od insta
 1. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/get-started/).
 2. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
 
-## Instalacja Git
+## Instalacja Git (Ten krok wykonujemy włącznie kiedy nie mamy zainstalowanej aplikacji Git)
 
 1. Pobierz **Git** z [oficjalnej strony](https://git-scm.com/downloads).
 2. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
@@ -31,6 +31,8 @@ Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od insta
 ```
 git clone link
 ```
+
+6. Aplikacja została zapisana w podanym katalogu
 
 ### 2. Budowanie Obrazu Docker
 1. Uruchom Docker desktop (aplikację którą przed chwilą instalowałeś/aś)
