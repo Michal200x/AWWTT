@@ -2,12 +2,17 @@
 
 Ten przewodnik pokaże, jak uruchomić aplikację przy użyciu Dockera, od instalacji Dockera do uruchomienia aplikacji.
 
-## Instalacja potrzebnych narzędzi
-
 ## Instalacja Docker (Ten krok wykonujemy włącznie kiedy nie mamy zainstalowanej aplikacji Docker desktop)
 
-1. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/get-started/).
-2. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
+1. Wcelu umożliwienia aplikacji Docker poprawnego działania włącz wirtualizację w ustawieniach BIOS jeśli nie masz jej włączonej skorzyystaj z [podradnika](https://www.docker.com/get-started/)
+    - Aby sprawdzić czy masz włączoną wirtualizację wpisz informacje o systemie w pasek wyszukiwania windows a następnie przejdź na sam dół strony
+    - Sprawdz czy jak na zdięciu poniżej pisze uruchomiona
+
+    ![wirtualizacja/wirtualizacja.png](wirtualizacja/wirtualizacja.png)
+
+2. Pobierz **Docker Desktop** z [oficjalnej strony](https://www.docker.com/get-started/).
+3. Zainstaluj pobrany program, postępując zgodnie z instrukcjami instalatora.
+4. Następnie otwórz aplikację i utwórz konto lub kontynułuj bez logowania
 
 ## Instalacja Git (Ten krok wykonujemy włącznie kiedy nie mamy zainstalowanej aplikacji Git)
 
