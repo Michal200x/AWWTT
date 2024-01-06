@@ -37,7 +37,7 @@ git clone link
 ### 2. Budowanie Obrazu Docker
 1. Uruchom Docker desktop (aplikację którą przed chwilą instalowałeś/aś)
 2. Otwórz terminal aby to zrobić wejdz w pasek wyszukiwania w windows, a następnie wpisz "cmd" lub "Wiersz polecenia"
-3. Przejdź do katalogu projektu, aby to zrobić w otworzony terminal wpisz komendę:
+3. Przejdź do katalogu projektu, aby to zrobić w otworzony terminalu wpisz komendę:
    ```
    cd C:\sciezka\do\glownego\katalogu\aplikacji
    ```
